@@ -8,10 +8,11 @@ const image = new ImageService();
 const imageUI = new ImageUI();
 
 // UI elements
-const elementRow =document.querySelector(".row");
+const elementImgRow =document.querySelector(".row");
 const inputCover = document.getElementById("coverImg");
 const inputUploadPhoto = document.getElementById("userPhotos");
-console.log(elementRow);
+
+//Функцыя для получения информаціи о польщователе с сервера
 function onLoad(e) {
     user.getInfo()
         .then((data) => {
@@ -28,6 +29,7 @@ function onLoad(e) {
         });
 }
 
+//Функцыя для добавления coverImg
 function onCoverUpload(e) {
     if (inputCover.files.length) {
         const [newCover] = inputCover.files;
@@ -39,31 +41,34 @@ function onCoverUpload(e) {
             });
     }
 }
+//Функцыя для добавления фото на сервер
 function onloadingPhoto(e) {
     if (inputUploadPhoto.files.length){
         const [newPhoto] = inputUploadPhoto.files;
         image.loadingPhoto(newPhoto)
-            .then(() => onLoad())
-            .catch((error) => {
-                console.log(error);
-            });
+          .then(() => onLoad())
+          .catch((error) => console.log(error));
     }
 }
+//Функцыя для удаление фото из сервер
 function deletePhoto(e) {
 
     if (e.target.closest('.remove-wrap')) {
-        const imgSrce = e.target.offsetParent.previousElementSibling;
+        // UI elements
+        const imgSrc = e.target.offsetParent.previousElementSibling;
         const imgWrap = e.target.offsetParent.previousElementSibling.parentElement;
 
             let questionDelete = confirm('Вы точно хотите удалить ето фото ?');
 
             if (questionDelete) {
+                // elements imgID - id photo, imgUrl - url photo
                 const imgId = imgWrap.dataset.imgId;
-                const imgUrl = imgSrce.currentSrc.split('/')[5];
+                const imgUrl = imgSrc.currentSrc.split('/')[5];
                 image.removePhoto(imgId, imgUrl);
             }
             user.getInfo()
-            .then(() => onLoad())
+             .then(() => onLoad())
+             .catch((error) => console.log(error));
 
     }
 
@@ -73,5 +78,5 @@ function deletePhoto(e) {
 window.addEventListener("load", onLoad);
 inputCover.addEventListener("change", onCoverUpload);
 inputUploadPhoto.addEventListener("change", onloadingPhoto);
-elementRow.addEventListener('click', deletePhoto);
+elementImgRow.addEventListener('click', deletePhoto);
 

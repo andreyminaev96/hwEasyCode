@@ -29,14 +29,12 @@ function submitHandlerRegistration(e) {
     if (!validation.check()) return console.error("Validation error.");
     register.register(regEmailInput.value, regPasswordInput.value, nickNameInput.value, firstNsmeInput.value, lastNameInput.value, phoneInput.value, genderInput.value, cityInput.value, countryInput.value, dayOfBirthInput.value, monthOfBirthInput.value, yearOfBirthInput.value)
         .then((res) => {
-            console.log(res);
             if (!res.error) {
-                    formReg.reset();
-                    window.location = "login.html";
-            } else {
-                message.show({text: res.message, error: res.error});
-                formReg.reset()
+                formReg.reset();
+                window.location = "login.html";
             }
+            message.show({text: res.message, error: res.error});
+            formReg.reset()
         });
 }
 //
